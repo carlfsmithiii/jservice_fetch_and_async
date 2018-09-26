@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Jservice</title>
+</head>
+<body>
+    <div id="jeopardy"></div>
+    <script>
+        let clueNumber;
+        // body language
+        const jeopardyNodeReference = document.getElementById("jeopardy");
+        fetch('http://jservice.io/api/category?id=897')
+            .then(response => response.json())
+            .then(categoryObject => {
+                const categoryTitle = categoryObject.title;
+                const clueNumber = Math.floor(categoryObject.clues_count * Math.random());
+                const clue = categoryObject.clues[clueNumber].question;
+                const text = document.createTextNode("Category: " + categoryTitle + ".  Clue: " + clue);
+                const fetchOuputNode = document.createElement('div');
+                fetchOuputNode.appendChild(text);
+                jeopardyNodeReference.appendChild(fetchOuputNode);
+            });
+            
+        async function displayCategoryAndOneRandomClue(categoryNumber) {
+            const response = await fetch(`http://jservice.io/api/category?id=${categoryNumber}`);
+            const categoryObject = await response.json();
+            const categoryTitle = categoryObject.title;
+            const clueNumber = Math.floor(categoryObject.clues_count * Math.random());
+            const clue = categoryObject.clues[clueNumber].question;
+            const text = document.createTextNode("Category: " + categoryTitle + ".  Clue: " + clue);
+            const asyncOutputNode = document.createElement('div');
+            asyncOutputNode.appendChild(text);
+            jeopardyNodeReference.appendChild(asyncOutputNode);
+        }
+
+        displayCategoryAndOneRandomClue(223); // word origins
+
+    </script>
+</body>
+</html>
